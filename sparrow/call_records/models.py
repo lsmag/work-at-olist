@@ -16,14 +16,14 @@ class CallRecord(models.Model):
     """
     Represents a call record, either start or end.
     """
-    START = 'st'
-    END = 'ed'
+    START = 'start'
+    END = 'end'
     RECORD_TYPES = [
         (START, 'Start'),
         (END, 'End'),
     ]
 
-    type = models.CharField(max_length=2, choices=RECORD_TYPES)
+    type = models.CharField(max_length=5, choices=RECORD_TYPES)
     call_id = models.PositiveIntegerField()
     timestamp = models.DateTimeField()
     source = models.CharField(max_length=11, validators=[phone_number_validator], blank=True)
@@ -31,3 +31,11 @@ class CallRecord(models.Model):
 
     class Meta:
         unique_together = ['type', 'call_id']
+
+    @classmethod
+    def is_record_type(cls, value):
+        return value in [x[0] for x in cls.RECORD_TYPES]
+
+    @property
+    def is_start_record(self):
+        return self.type == self.START
