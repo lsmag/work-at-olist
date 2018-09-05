@@ -1,0 +1,162 @@
+[
+  {
+    "model": "call_records.callrecord",
+    "pk": 1,
+    "fields": {
+      "call_id": 70,
+      "type": "start",
+      "timestamp": "2016-02-29T12:00:00Z",
+      "source": "99988526423",
+      "destination": "9993468278"
+    }
+  },
+  {
+    "model": "call_records.callrecord",
+    "pk": 2,
+    "fields": {
+      "call_id": 70,
+      "type": "end",
+      "timestamp": "2016-02-29T14:00:00Z"
+    }
+  },
+  {
+    "model": "call_records.callrecord",
+    "pk": 3,
+    "fields": {
+      "call_id": 71,
+      "type": "start",
+      "timestamp": "2017-12-12T15:07:13Z",
+      "source": "99988526423",
+      "destination": "9993468278"
+    }
+  },
+  {
+    "model": "call_records.callrecord",
+    "pk": 4,
+    "fields": {
+      "call_id": 71,
+      "type": "end",
+      "timestamp": "2017-12-12T15:14:56Z"
+    }
+  },
+  {
+    "model": "call_records.callrecord",
+    "pk": 5,
+    "fields": {
+      "call_id": 72,
+      "type": "start",
+      "timestamp": "2017-12-12T22:47:56Z",
+      "source": "99988526423",
+      "destination": "9993468278"
+    }
+  },
+  {
+    "model": "call_records.callrecord",
+    "pk": 6,
+    "fields": {
+      "call_id": 72,
+      "type": "end",
+      "timestamp": "2017-12-12T22:50:56Z"
+    }
+  },
+  {
+    "model": "call_records.callrecord",
+    "pk": 7,
+    "fields": {
+      "call_id": 73,
+      "type": "start",
+      "timestamp": "2017-12-12T21:57:13Z",
+      "source": "99988526423",
+      "destination": "9993468278"
+    }
+  },
+  {
+    "model": "call_records.callrecord",
+    "pk": 8,
+    "fields": {
+      "call_id": 73,
+      "type": "end",
+      "timestamp": "2017-12-12T22:10:56Z"
+    }
+  },
+  {
+    "model": "call_records.callrecord",
+    "pk": 9,
+    "fields": {
+      "call_id": 74,
+      "type": "start",
+      "timestamp": "2017-12-12T04:57:13Z",
+      "source": "99988526423",
+      "destination": "9993468278"
+    }
+  },
+  {
+    "model": "call_records.callrecord",
+    "pk": 10,
+    "fields": {
+      "call_id": 74,
+      "type": "end",
+      "timestamp": "2017-12-12T06:10:56Z"
+    }
+  },
+  {
+    "model": "call_records.callrecord",
+    "pk": 11,
+    "fields": {
+      "call_id": 75,
+      "type": "start",
+      "timestamp": "2017-12-12T21:57:13Z",
+      "source": "99988526423",
+      "destination": "9993468278"
+    }
+  },
+  {
+    "model": "call_records.callrecord",
+    "pk": 12,
+    "fields": {
+      "call_id": 75,
+      "type": "end",
+      "timestamp": "2017-12-13T22:10:56Z"
+    }
+  },
+  {
+    "model": "call_records.callrecord",
+    "pk": 13,
+    "fields": {
+      "call_id": 76,
+      "type": "start",
+      "timestamp": "2017-12-12T15:07:58Z",
+      "source": "99988526423",
+      "destination": "9993468278"
+    }
+  },
+  {
+    "model": "call_records.callrecord",
+    "pk": 14,
+    "fields": {
+      "call_id": 76,
+      "type": "end",
+      "timestamp": "2017-12-12T15:12:56Z"
+    }
+  },
+  {
+    "model": "call_records.callrecord",
+    "pk": 15,
+    "fields": {
+      "call_id": 77,
+      "type": "start",
+      "timestamp": "2018-02-28T21:57:13Z",
+      "source": "99988526423",
+      "destination": "9993468278"
+    }
+  },
+  {
+    "model": "call_records.callrecord",
+    "pk": 16,
+    "fields": {
+      "call_id": 77,
+      "type": "end",
+      "timestamp": "2018-03-01T22:10:56Z"
+    }
+  }
+]
