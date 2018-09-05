@@ -2,3 +2,4 @@
 max-line-length = 119
 exclude =
     sparrow/core/settings/*
+    migrations
