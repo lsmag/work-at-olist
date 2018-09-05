@@ -1,0 +1,27 @@
+version: '3.2'
+services:
+  db:
+    image: postgres:10-alpine
+    volumes:
+      - type: bind
+        source: ${SPARROW_DATA_DIR}sparrow-data-postgres
+        target: /var/lib/postgresql/data
+
+  sparrow:
+    env_file:
+      - .env
+    build:
+      context: dockerfiles/sparrow
+    volumes:
+      - type: bind
+        source: .
+        target: /app/sparrow
+      - type: bind
+        source: ${SPARROW_DATA_DIR}sparrow-pipenv-data
+        target: /root/.local/share/virtualenvs
+    links:
+      - db
+    ports:
+      - "8000:8000"
+    command:
+      - dockerfiles/sparrow/init.sh
