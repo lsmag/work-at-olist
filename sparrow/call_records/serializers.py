@@ -23,7 +23,7 @@ class CallRecordStartSerializer(CallRecordSerializerMixin, serializers.ModelSeri
 
     It can be used for either POST requests for START call records or
     for serializing _any_ call record.
-    
+
     When serializing, if call record is of END type, it'll omit the
     `source` and `destination` fields
     """

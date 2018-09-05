@@ -158,6 +158,7 @@ def test_post_start_record_blank_phone_number(client, field):
     assert response.status_code == status.HTTP_400_BAD_REQUEST
     assert json.loads(response.content) == {field: ['This field may not be blank.']}
 
+
 @pytest.mark.parametrize('field, invalid_value', [
     ('source', 'a'),
     ('source', '~'),
