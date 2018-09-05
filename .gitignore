@@ -8,3 +8,5 @@
 .env
 tmp
 sparrow.egg-info/
+.pytest_cache/
+.tox/

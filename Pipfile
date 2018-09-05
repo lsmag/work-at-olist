@@ -7,3 +7,8 @@ name = "pypi"
 sparrow = {editable = true, path = "."}
 
 [dev-packages]
+pytest-django = "*"
+pytest-cov = "*"
+pytest-dotenv = "*"
+tox = "*"
+"flake8" = "*"

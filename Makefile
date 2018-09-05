@@ -11,5 +11,8 @@ run:  ## Runs all services in non-detachable mode
 
 all: build run  ## Builds and runs the project
 
+test:  ## Runs the Python test suite with tox
+	docker-compose run --rm sparrow pipenv run tox
+
 .PHONY: help build run all
 
