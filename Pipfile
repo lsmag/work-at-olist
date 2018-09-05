@@ -4,7 +4,13 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-sparrow = {editable = true, path = "."}
+gunicorn = "*"
+django = "*"
+djangorestframework = "*"
+python-decouple = "*"
+"psycopg2" = "*"
+dj-database-url = "*"
+python-dateutil = "*"
 
 [dev-packages]
 pytest-django = "*"
@@ -14,3 +20,6 @@ tox = "*"
 "flake8" = "*"
 model-mommy = "*"
 freezegun = "*"
+
+[requires]
+python_version = "3.6"

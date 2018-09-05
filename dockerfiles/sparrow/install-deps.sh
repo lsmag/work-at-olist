@@ -5,7 +5,7 @@ set -o xtrace
 
 cd /app/sparrow
 
-pipenv --python 3.7
+pipenv --python 3.6
 pipenv install --dev
 
 DB_HOST=$(pipenv run python -c "import dj_database_url; print(dj_database_url.config()['HOST'])")
