@@ -13,5 +13,6 @@ setup(
         'python-decouple',
         'psycopg2',
         'dj-database-url',
+        'python-dateutil',
     ]
 )

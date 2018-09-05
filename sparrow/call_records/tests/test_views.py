@@ -1,16 +1,13 @@
 import json
 import pytest
+from freezegun import freeze_time
 from operator import itemgetter
 
-from django.utils import timezone
 from django.urls import reverse
 from rest_framework import status
 
-from sparrow.call_records.models import CallRecord
-
-
-def tzdatetime(*args):
-    return timezone.make_aware(timezone.datetime(*args))
+from sparrow.call_records.models import CallRecord, invalid_phone_number_message
+from .utils import tzdatetime
 
 
 def record_to_json(record):
@@ -185,10 +182,115 @@ def test_post_start_record_invalid_phone_number(client, field, invalid_value):
     response = client.post(reverse('call_records:index'), data=data)
 
     assert response.status_code == status.HTTP_400_BAD_REQUEST
-    error_messages = [('Invalid phone number, format should be AAXXXXXXXXX where AA '
-                       'is the area code and XXXXXXXXX is the phone number, composed '
-                       'of 8 to 9 digits')]
+    error_messages = [invalid_phone_number_message]
     if len(invalid_value) > 11:
         error_messages.append('Ensure this field has no more than 11 characters.')
 
     assert json.loads(response.content) == {field: error_messages}
+
+
+@freeze_time('2018-02-04')
+@pytest.mark.parametrize('reference_period', ['201801', None])
+@pytest.mark.django_db
+def test_get_telephone_bill(client, reference_period):
+    subscriber = '1198761234'
+    CallRecord.objects.bulk_create([
+        CallRecord(type=CallRecord.START, call_id=12, timestamp=tzdatetime(2018, 1, 1, 10),
+                   source=subscriber, destination='2199997777'),
+        CallRecord(type=CallRecord.END, call_id=12, timestamp=tzdatetime(2018, 1, 1, 11)),
+
+        CallRecord(type=CallRecord.START, call_id=21, timestamp=tzdatetime(2018, 1, 2, 11),
+                   source=subscriber, destination='2199997777'),
+        CallRecord(type=CallRecord.END, call_id=21, timestamp=tzdatetime(2018, 1, 2, 12)),
+
+        CallRecord(type=CallRecord.START, call_id=32, timestamp=tzdatetime(2018, 1, 3, 12),
+                   source=subscriber, destination='2199997777'),
+        CallRecord(type=CallRecord.END, call_id=32, timestamp=tzdatetime(2018, 1, 3, 14)),
+    ])
+
+    response = client.get(reverse('call_records:telephone_bill'), data={
+        'subscriber': subscriber,
+        'reference_period': '201801'
+    })
+
+    assert response.status_code == status.HTTP_200_OK
+    assert json.loads(response.content) == {
+        'subscriber': subscriber,
+        'reference_period': '201801',
+        'call_records': [
+            {'destination': '2199997777',
+             'duration': '1h',
+             'price': 'R$ 5,76',
+             'start_date': '2018-01-01',
+             'start_time': '10:00:00Z'},
+            {'destination': '2199997777',
+             'duration': '1h',
+             'price': 'R$ 5,76',
+             'start_date': '2018-01-02',
+             'start_time': '11:00:00Z'},
+            {'destination': '2199997777',
+             'duration': '2h',
+             'price': 'R$ 11,16',
+             'start_date': '2018-01-03',
+             'start_time': '12:00:00Z'}
+        ]
+    }
+
+
+@freeze_time('2018-02-04')
+def test_get_telephone_bill_current_month_should_fail(client):
+    response = client.get(reverse('call_records:telephone_bill'), data={
+        'subscriber': '1122334455',
+        'reference_period': '201802'
+    })
+
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
+    assert json.loads(response.content) == {'detail': 'Reference period 201802 is not closed yet'}
+
+
+def test_get_telephone_bill_missing_subscriber(client):
+    response = client.get(reverse('call_records:telephone_bill'), data={
+        'reference_period': '201801'
+    })
+
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
+    assert json.loads(response.content) == {'subscriber': ['This field is required.']}
+
+
+@pytest.mark.parametrize('subscriber, expected_errors', [
+    ('', ['This field is required.']),
+    ('a', [invalid_phone_number_message]),
+    ('~', [invalid_phone_number_message]),
+    ('123456', [invalid_phone_number_message]),  # too short
+    ('11234523452345',  [invalid_phone_number_message,  # too long
+                         'Ensure this value has at most 11 characters (it has 14).']),
+])
+def test_get_telephone_bill_invalid_subscriber(client, subscriber, expected_errors):
+    response = client.get(reverse('call_records:telephone_bill'), data={
+        'subscriber': subscriber,
+        'reference_period': '201801'
+    })
+
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
+    assert json.loads(response.content) == {'subscriber': expected_errors}
+
+
+standard_regex_period_error = 'Reference period should be in the YYYYMM format'
+
+
+@pytest.mark.parametrize('reference_period, expected_errors', [
+    ('a', [standard_regex_period_error]),
+    ('12345', [standard_regex_period_error]),  # too short
+    ('2233445', [standard_regex_period_error, 'Ensure this value has at most 6 characters (it has 7).']),  # too long
+    (12, [standard_regex_period_error]),
+    (True, [standard_regex_period_error]),
+])
+@pytest.mark.django_db
+def test_get_telephone_bill_invalid_reference_period(client, reference_period, expected_errors):
+    response = client.get(reverse('call_records:telephone_bill'), data={
+        'subscriber': '1198765432',
+        'reference_period': reference_period
+    })
+
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
+    assert json.loads(response.content) == {'reference_period': expected_errors}

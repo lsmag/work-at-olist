@@ -1,8 +1,14 @@
+__all__ = ['CallRecordsView', 'get_telephone_bill']
+
 from django.db import IntegrityError
 from rest_framework import generics
 from rest_framework import status
+from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
+from sparrow.call_records.api import telephone_bill
+from sparrow.call_records.exceptions import TelephoneBillError
+from sparrow.call_records.forms import TelephoneBillForm
 from sparrow.call_records.models import CallRecord
 from sparrow.call_records.serializers import CallRecordStartSerializer, CallRecordEndSerializer
 
@@ -32,3 +38,18 @@ class CallRecordsView(generics.ListCreateAPIView):
             return Response({
                 'detail': 'Call record already exists'
             }, status=status.HTTP_409_CONFLICT)
+
+
+@api_view(['GET'])
+def get_telephone_bill(request):
+    f = TelephoneBillForm(request.GET)
+    if f.is_valid():
+        try:
+            return Response(telephone_bill(
+                subscriber=f.cleaned_data['subscriber'],
+                reference_period=f.cleaned_data['reference_period']
+            ))
+        except TelephoneBillError as e:
+            return Response({'detail': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+    else:
+        return Response(f.errors, status=status.HTTP_400_BAD_REQUEST)

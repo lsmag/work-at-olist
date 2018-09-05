@@ -4,11 +4,12 @@ from django.core.validators import RegexValidator
 from django.db import models
 
 
+invalid_phone_number_message = ('Invalid phone number, format should be AAXXXXXXXXX where AA is '
+                                'the area code and XXXXXXXXX is the phone number, composed of 8 '
+                                'to 9 digits')
 phone_number_validator = RegexValidator(
     regex=r'^\d{10,11}$',
-    message=('Invalid phone number, format should be AAXXXXXXXXX where AA is '
-             'the area code and XXXXXXXXX is the phone number, composed of 8 '
-             'to 9 digits')
+    message=invalid_phone_number_message
 )
 
 
