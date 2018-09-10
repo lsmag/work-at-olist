@@ -1,12 +1,11 @@
 Getting started
 ===================
 
-This project uses Django 2.1, Python 3.7 and PostgreSQL for the call
+This project uses Django 2.1, Python 3.6 and PostgreSQL for the call
 records API, and it's named "sparrow" (because naming is hard). It was
 developed using Arch Linux, written in Emacs and uses a small number
 of libraries for testing: pytest, flake8, coverage.py, freezegun,
-model_mommy. The dependencies are _both_ managed by setup.py and by
-Pipenv.
+model_mommy. The dependencies are managed by Pipenv.
 
 It was written to be developed using docker-compose for both running
 the server and the test suite. The next chapters, listed below, will

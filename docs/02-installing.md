@@ -2,7 +2,7 @@ Installing Sparrow for development
 ============================================
 
 This project uses docker and docker-compose. The `docker-compose.yml`
-uses the version `3.2`, so make sure to use a version of
+uses the file format version `3.2`, so make sure to use a version of
 docker-compose that supports it.
 
 First off, copy `example.env` to a local, git-ignored `.env`, then
